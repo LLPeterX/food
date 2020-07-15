@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 *.docm
+.vs/
+.vscode/
+.jshintrc
 
 # testing
 /coverage

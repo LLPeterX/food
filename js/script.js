@@ -154,6 +154,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // ------------- карточки продуктов ----------------------
 
+  const getResource = async (url) => {
+    const res =  await fetch(url);
+    if(!res.ok) {
+      throw new Error(`"Ошибка! Сервер ${url} сообщает ${res.status}: ${res.statusText}`);
+    }
+    return res.json();
+  };
+
   class MenuCard {
     constructor(src, alt, title, descr, price, parentSelector, ...classes) {
       this.src = src;
@@ -172,14 +180,16 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     // отображение карточки продукта
     render() {
-      let html = `<img src=${this.src} alt=${this.alt}>
+      let html = `
+      <div class="menu__item">
+      <img src=${this.src} alt=${this.alt}>
     <h3 class="menu__item-subtitle">Меню "${this.title}"</h3>
     <div class="menu__item-descr">${this.descr}</div>
     <div class="menu__item-divider"></div>
     <div class="menu__item-price">
         <div class="menu__item-cost">Цена:</div>
         <div class="menu__item-total"><span>${this.price}</span> руб.</div>
-    </div>`;
+    </div></div>`;
       const el = document.createElement("div");
       if (this.classes.length === 0) {
         this.classes = ['menu__item'];
@@ -190,7 +200,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
   // jshint ignore: start
-  const selector = ".menu__field>.container";
+  const selector = ".menu__field .container";
 
   // new MenuCard("img/tabs/vegy.jpg", "vegy", "Фитнес",
   //   'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
@@ -202,6 +212,33 @@ window.addEventListener('DOMContentLoaded', () => {
   //   'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
   //   1.0, selector).render();
 // jshint ignore: end
+
+  // getResource('http://localhost:3000/menu')
+  // .then(data => {
+  //   data.forEach( ( {img,altimg,title,descr,price} ) => 
+  //     new MenuCard(img,altimg,title,descr,price, selector).render() //jshint ignore:line
+  //   );
+  // });
+  console.log('alternative2');
+  function createCard(data) { // data - массив объектов меню
+    data.forEach(({img,altimg,title,descr,price})=>{
+      const el = document.createElement('div');
+      el.classList.add("menu__item");
+      el.innerHTML=`<img src=${img} alt=${altimg}>
+      <h3 class="menu__item-subtitle">Меню "${title}"</h3>
+      <div class="menu__item-descr">${descr}</div>
+      <div class="menu__item-divider"></div>
+      <div class="menu__item-price">
+          <div class="menu__item-cost">Цена:</div>
+          <div class="menu__item-total"><span>${price}</span> руб.</div>
+      </div>`;
+      document.querySelector(".menu .container").append(el);
+      //document.querySelector(selector).append(el);
+    });
+  }
+
+  getResource('http://localhost:3000/menu')
+   .then(data => createCard(data));
   
 // --------------- 4.53, 59. Передача данных форм обратной связи на сервер -------------
   const forms = document.querySelectorAll('form');
@@ -216,9 +253,9 @@ window.addEventListener('DOMContentLoaded', () => {
     bindPostData(item);
   });
 
-  // функция обращения к серверу.
+  // функция отправки фопрмы обратной сваязи на сервер.
   // @param url - URL запроса
-  // @param data - данные 
+  // @param data - данные формы
   const postData = async (url,data) => {
     const res =  await fetch(url,{
        method: 'POST',
@@ -226,7 +263,7 @@ window.addEventListener('DOMContentLoaded', () => {
         'Content-Type': 'application/json; charset=utf-8'
       },
       body: data});
-      return res.json(); // ответ - promise!
+      return await res.json(); // ответ - promise!
   };
 
   // функция обработки и отправки данных формы обратной связи
@@ -241,11 +278,7 @@ window.addEventListener('DOMContentLoaded', () => {
       form.insertAdjacentElement('afterend',statusMessage); // всё равно не работает
     
       const formData = new FormData(form);
-      const formObj={};
-      formData.forEach((value, key) => {
-        formObj[key] = value;
-      } );
-      const json = JSON.stringify(formObj);
+      const json =  JSON.stringify(Object.fromEntries(formData.entries()));
 
       postData('http://localhost:3000/requests',json)
       .then(response => {
@@ -294,7 +327,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 }); // end 'DOMContentLoaded'
-
 
 
 
