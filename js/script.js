@@ -219,27 +219,38 @@ window.addEventListener('DOMContentLoaded', () => {
   //     new MenuCard(img,altimg,title,descr,price, selector).render() //jshint ignore:line
   //   );
   // });
-  console.log('alternative2');
-  function createCard(data) { // data - массив объектов меню
-    data.forEach(({img,altimg,title,descr,price})=>{
-      const el = document.createElement('div');
-      el.classList.add("menu__item");
-      el.innerHTML=`<img src=${img} alt=${altimg}>
-      <h3 class="menu__item-subtitle">Меню "${title}"</h3>
-      <div class="menu__item-descr">${descr}</div>
-      <div class="menu__item-divider"></div>
-      <div class="menu__item-price">
-          <div class="menu__item-cost">Цена:</div>
-          <div class="menu__item-total"><span>${price}</span> руб.</div>
-      </div>`;
-      document.querySelector(".menu .container").append(el);
-      //document.querySelector(selector).append(el);
-    });
-  }
 
-  getResource('http://localhost:3000/menu')
-   .then(data => createCard(data));
+
+  // console.log('alternative2');
+  // function createCard(data) { // data - массив объектов меню
+  //   data.forEach(({img,altimg,title,descr,price})=>{
+  //     const el = document.createElement('div');
+  //     el.classList.add("menu__item");
+  //     el.innerHTML=`<img src=${img} alt=${altimg}>
+  //     <h3 class="menu__item-subtitle">Меню "${title}"</h3>
+  //     <div class="menu__item-descr">${descr}</div>
+  //     <div class="menu__item-divider"></div>
+  //     <div class="menu__item-price">
+  //         <div class="menu__item-cost">Цена:</div>
+  //         <div class="menu__item-total"><span>${price}</span> руб.</div>
+  //     </div>`;
+  //     document.querySelector(".menu .container").append(el);
+  //     //document.querySelector(selector).append(el);
+  //   });
+  // }
+
+  // getResource('http://localhost:3000/menu')
+  //  .then(data => createCard(data));
   
+// --------------- 4.60 axios ---------------------------------
+//axios.get('http://localhost:3000/menu').then(data => console.log(data.data));
+axios.get('http://localhost:3000/menu')
+.then(data => {
+    data.data.forEach( ( {img,altimg,title,descr,price} ) => 
+      new MenuCard(img,altimg,title,descr,price, selector).render() //jshint ignore:line
+    );
+  });
+
 // --------------- 4.53, 59. Передача данных форм обратной связи на сервер -------------
   const forms = document.querySelectorAll('form');
   // массив, в котором данные  ходе выполнени запроса:
