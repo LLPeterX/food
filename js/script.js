@@ -333,8 +333,41 @@ axios.get('http://localhost:3000/menu')
       closeModalWindow();
     },4000);
   } // end thanksModal
-//  -- test fetch()
-//  fetch('http://localhost:3000/menu').then(data=>data.json()).then(res=>console.log(res));
+
+  // --------------- 4.61 Slider ---
+  const slides = document.querySelectorAll(".offer__slide"),
+        prevButton = document.querySelector(".offer__slider-prev"),
+        nextButton = document.querySelector(".offer__slider-next"),
+        countPlaceholder = document.querySelector('#current'),
+        totalPlaceholder = document.querySelector('#total');
+  const slidesCount = slides.length;
+  let slideIndex=1; // текущий слайд
+  totalPlaceholder.innerHTML = (slidesCount<10) ? "0"+slidesCount : slidesCount.toString();
+  
+  function showSlide(n) {
+    if(n<1) {
+      slideIndex=slidesCount;
+    }
+    if(n>slidesCount) {
+      slideIndex=1;
+    }
+    countPlaceholder.innerHTML= (slideIndex<10) ? "0"+slideIndex.toString() : slideIndex.toString();
+    // apply "hide" to all slides except current
+    //slides.forEach(el => el.classList.add('hide'));
+    slides.forEach(el => el.style.display='none');
+    // remove 'hide' to 
+    //slides[slideIndex-1].classList.remove('hide');
+    slides[slideIndex-1].style.display='block';
+    
+  }
+
+  prevButton.addEventListener('click',()=> {
+    showSlide(--slideIndex);
+  });
+  nextButton.addEventListener('click',()=> {
+    showSlide(++slideIndex);
+  });
+  showSlide(slideIndex); // начальный показ 1-го слайда
 
 
 }); // end 'DOMContentLoaded'
