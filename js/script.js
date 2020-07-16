@@ -107,7 +107,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const modalTriggers = document.querySelectorAll('[data-modal]'),
     modalWindow = document.querySelector('.modal');
-    
+
   // функции скрытия и показа модального  окна
   function closeModalWindow() {
     modalWindow.classList.remove('show');
@@ -128,7 +128,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // если кликнули за пределами окна (т.е. попали в div class=modal)
   // или нажали ESC, или элемент содержит атрибут "data-close", то закрыть окно
   modalWindow.addEventListener('click', (event) => {
-    if (event.target === modalWindow || event.target.getAttribute('data-close')=='') {
+    if (event.target === modalWindow || event.target.getAttribute('data-close') == '') {
       closeModalWindow();
     }
   });
@@ -155,8 +155,8 @@ window.addEventListener('DOMContentLoaded', () => {
   // ------------- карточки продуктов ----------------------
 
   const getResource = async (url) => {
-    const res =  await fetch(url);
-    if(!res.ok) {
+    const res = await fetch(url);
+    if (!res.ok) {
       throw new Error(`"Ошибка! Сервер ${url} сообщает ${res.status}: ${res.statusText}`);
     }
     return res.json();
@@ -211,7 +211,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // new MenuCard("img/tabs/post.jpg", "post", "Постное",
   //   'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
   //   1.0, selector).render();
-// jshint ignore: end
+  // jshint ignore: end
 
   // getResource('http://localhost:3000/menu')
   // .then(data => {
@@ -241,17 +241,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // getResource('http://localhost:3000/menu')
   //  .then(data => createCard(data));
-  
-// --------------- 4.60 axios ---------------------------------
-//axios.get('http://localhost:3000/menu').then(data => console.log(data.data));
-axios.get('http://localhost:3000/menu')
-.then(data => {
-    data.data.forEach( ( {img,altimg,title,descr,price} ) => 
-      new MenuCard(img,altimg,title,descr,price, selector).render() //jshint ignore:line
-    );
-  });
 
-// --------------- 4.53, 59. Передача данных форм обратной связи на сервер -------------
+  // --------------- 4.60 axios ---------------------------------
+  //axios.get('http://localhost:3000/menu').then(data => console.log(data.data));
+  axios.get('http://localhost:3000/menu') // jshint ignore:line
+    .then(data => {
+      data.data.forEach(({ img, altimg, title, descr, price }) =>
+        new MenuCard(img, altimg, title, descr, price, selector).render() //jshint ignore:line
+      );
+    });
+
+  // --------------- 4.53, 59. Передача данных форм обратной связи на сервер -------------
   const forms = document.querySelectorAll('form');
   // массив, в котором данные  ходе выполнени запроса:
   let message = {
@@ -267,14 +267,15 @@ axios.get('http://localhost:3000/menu')
   // функция отправки фопрмы обратной сваязи на сервер.
   // @param url - URL запроса
   // @param data - данные формы
-  const postData = async (url,data) => {
-    const res =  await fetch(url,{
-       method: 'POST',
-       headers: {
+  const postData = async (url, data) => {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
         'Content-Type': 'application/json; charset=utf-8'
       },
-      body: data});
-      return await res.json(); // ответ - promise!
+      body: data
+    });
+    return await res.json(); // ответ - promise!
   };
 
   // функция обработки и отправки данных формы обратной связи
@@ -283,26 +284,26 @@ axios.get('http://localhost:3000/menu')
       e.preventDefault();
       // div для сообщения о результате в нижней части формы
       const statusMessage = document.createElement('div');
-      statusMessage.src=message.loading;
+      statusMessage.src = message.loading;
       statusMessage.style.cssText = "display: 'block'; margin: 0 auto;";
-      setTimeout(() => statusMessage.remove(),5000);
-      form.insertAdjacentElement('afterend',statusMessage); // всё равно не работает
-    
-      const formData = new FormData(form);
-      const json =  JSON.stringify(Object.fromEntries(formData.entries()));
+      setTimeout(() => statusMessage.remove(), 5000);
+      form.insertAdjacentElement('afterend', statusMessage); // всё равно не работает
 
-      postData('http://localhost:3000/requests',json)
-      .then(response => {
-          console.log('SERVER RESP:',response);
+      const formData = new FormData(form);
+      const json = JSON.stringify(Object.fromEntries(formData.entries()));
+
+      postData('http://localhost:3000/requests', json)
+        .then(response => {
+          console.log('SERVER RESP:', response);
           showThanksModal(message.success); // Окно "спасибо", закроется через 4 сек.
           statusMessage.remove(); // удаляем спиннер со статусом под формой
-      })
-      .catch(()=> {
-        showThanksModal(message.failure);
-      })
-      .finally(()=> {
-        form.reset();
-      });
+        })
+        .catch(() => {
+          showThanksModal(message.failure);
+        })
+        .finally(() => {
+          form.reset();
+        });
 
     }); // event listener
   } // bindPostData()
@@ -326,48 +327,87 @@ axios.get('http://localhost:3000/menu')
     `;
     const parent = document.querySelector('.modal');
     parent.append(thanksModal);
-    setTimeout(()=>{
+    setTimeout(() => {
       thanksModal.remove();
       prevModalDialog.classList.remove('hide');
       prevModalDialog.classList.add('show');
       closeModalWindow();
-    },4000);
+    }, 4000);
   } // end thanksModal
 
   // --------------- 4.61 Slider ---
   const slides = document.querySelectorAll(".offer__slide"),
-        prevButton = document.querySelector(".offer__slider-prev"),
-        nextButton = document.querySelector(".offer__slider-next"),
-        countPlaceholder = document.querySelector('#current'),
-        totalPlaceholder = document.querySelector('#total');
+    prevButton = document.querySelector(".offer__slider-prev"),
+    nextButton = document.querySelector(".offer__slider-next"),
+    countPlaceholder = document.querySelector('#current'),
+    totalPlaceholder = document.querySelector('#total');
   const slidesCount = slides.length;
-  let slideIndex=1; // текущий слайд
-  totalPlaceholder.innerHTML = (slidesCount<10) ? "0"+slidesCount : slidesCount.toString();
-  
-  function showSlide(n) {
-    if(n<1) {
-      slideIndex=slidesCount;
-    }
-    if(n>slidesCount) {
-      slideIndex=1;
-    }
-    countPlaceholder.innerHTML= (slideIndex<10) ? "0"+slideIndex.toString() : slideIndex.toString();
-    // apply "hide" to all slides except current
-    //slides.forEach(el => el.classList.add('hide'));
-    slides.forEach(el => el.style.display='none');
-    // remove 'hide' to 
-    //slides[slideIndex-1].classList.remove('hide');
-    slides[slideIndex-1].style.display='block';
-    
-  }
+  let slideIndex = 1; // текущий слайд
+  totalPlaceholder.innerHTML = (slidesCount < 10) ? "0" + slidesCount : slidesCount.toString();
 
-  prevButton.addEventListener('click',()=> {
-    showSlide(--slideIndex);
+  // function showSlide(n) {
+  //   if(n<1) {
+  //     slideIndex=slidesCount;
+  //   }
+  //   if(n>slidesCount) {
+  //     slideIndex=1;
+  //   }
+  //   countPlaceholder.innerHTML= (slideIndex<10) ? "0"+slideIndex.toString() : slideIndex.toString();
+  //   // apply "hide" to all slides except current
+  //   //slides.forEach(el => el.classList.add('hide')); // так не работает!
+  //   slides.forEach(el => el.style.display='none');
+  //   slides[slideIndex-1].style.display='block';
+
+  // }
+
+  // prevButton.addEventListener('click',()=> {
+  //   showSlide(--slideIndex);
+  // });
+  // nextButton.addEventListener('click',()=> {
+  //   showSlide(++slideIndex);
+  // });
+  // showSlide(slideIndex); // начальный показ 1-го слайда
+  // ----------- slides - вариант 2 ------------------
+  // slideIndex со старого урока
+  const slidesWrapper = document.querySelector(".offer__slider-wrapper"),
+        slidesField = document.querySelector(".offer__slider-inner");
+  const slideWidth = +window.getComputedStyle(slidesWrapper).width.split('px')[0]; // 650, number
+  let slideOffset = 0;
+  slidesField.style.width = slidesCount * 100 + '%'; // 400%
+  slidesField.style.display = 'flex';
+  slidesField.style.transition = "0.5s all";
+  slidesWrapper.style.overflow = 'hidden';
+  slides.forEach(s => s.style.width = slideWidth + 'px'); // все слайды по ширине окна - 650px
+  nextButton.addEventListener('click', () => {
+    if (slideOffset == slideWidth * (slidesCount - 1)) {
+      slideOffset = 0;
+    } else {
+      slideOffset += slideWidth;
+    }
+    slidesField.style.transform = `translateX(-${slideOffset}px)`; // -
+    showNumberOfCurrentSlide(++slideIndex);
   });
-  nextButton.addEventListener('click',()=> {
-    showSlide(++slideIndex);
+
+  prevButton.addEventListener('click', () => {
+    if (slideOffset == 0) {
+      slideOffset = slideWidth * (slidesCount - 1); // 1950, а у "ленты" - 2600px
+    } else {
+      slideOffset -= slideWidth;
+    }
+    slidesField.style.transform = `translateX(-${slideOffset}px)`; // в стилях есть transform: translateX(-1950px)!
+    showNumberOfCurrentSlide(--slideIndex);
   });
-  showSlide(slideIndex); // начальный показ 1-го слайда
+
+  // обновить N текущего слайда в html
+  function showNumberOfCurrentSlide(n) {
+    if (n < 1) {
+      slideIndex = slidesCount;
+    }
+    if (n > slidesCount) {
+      slideIndex = 1;
+    }
+    countPlaceholder.textContent = (slideIndex < 10) ? "0" + slideIndex : slideIndex;
+  }
 
 
 }); // end 'DOMContentLoaded'
