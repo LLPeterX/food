@@ -370,7 +370,9 @@ window.addEventListener('DOMContentLoaded', () => {
   // ----------- slides - вариант 2 ------------------
   // slideIndex со старого урока
   const slidesWrapper = document.querySelector(".offer__slider-wrapper"),
-        slidesField = document.querySelector(".offer__slider-inner");
+    slidesField = document.querySelector(".offer__slider-inner"),
+    slider = document.querySelector(".offer__slider");
+
   const slideWidth = +window.getComputedStyle(slidesWrapper).width.split('px')[0]; // 650, number
   let slideOffset = 0;
   slidesField.style.width = slidesCount * 100 + '%'; // 400%
@@ -378,6 +380,39 @@ window.addEventListener('DOMContentLoaded', () => {
   slidesField.style.transition = "0.5s all";
   slidesWrapper.style.overflow = 'hidden';
   slides.forEach(s => s.style.width = slideWidth + 'px'); // все слайды по ширине окна - 650px
+  slider.style.position = 'relative';
+
+  const indicators = document.createElement("ol");
+  indicators.classList.add("carousel-indicators");
+  slider.append(indicators);
+  // размешаем точки
+  for (let i = 0; i < slidesCount; i++) {
+    const dot = document.createElement("li");
+    dot.setAttribute("data-slide-to", i + 1);
+    dot.classList.add("dot");
+    if (i === 0) {
+      dot.style.opacity = 1;
+    }
+    indicators.append(dot);
+  }
+
+  // добавляем слушатели событий на точки
+  document.querySelectorAll(".dot").forEach(dot => {
+    dot.addEventListener('click', () => {
+      slideIndex = +dot.getAttribute('data-slide-to');
+      slideOffset = slideWidth * (slideIndex - 1);
+      slidesField.style.transform = `translateX(-${slideOffset}px)`;
+      setActiveDot();
+      showNumberOfCurrentSlide(slideIndex);
+
+    });
+  });
+
+  function setActiveDot() {
+    document.querySelectorAll(".dot").forEach(dot => dot.style.opacity = 0.5);
+    document.querySelector(`[data-slide-to="${slideIndex}"`).style.opacity = 1;
+  }
+
   nextButton.addEventListener('click', () => {
     if (slideOffset == slideWidth * (slidesCount - 1)) {
       slideOffset = 0;
@@ -386,6 +421,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     slidesField.style.transform = `translateX(-${slideOffset}px)`; // -
     showNumberOfCurrentSlide(++slideIndex);
+    setActiveDot();
   });
 
   prevButton.addEventListener('click', () => {
@@ -396,6 +432,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     slidesField.style.transform = `translateX(-${slideOffset}px)`; // в стилях есть transform: translateX(-1950px)!
     showNumberOfCurrentSlide(--slideIndex);
+    setActiveDot();
   });
 
   // обновить N текущего слайда в html
@@ -408,7 +445,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     countPlaceholder.textContent = (slideIndex < 10) ? "0" + slideIndex : slideIndex;
   }
-
 
 }); // end 'DOMContentLoaded'
 
