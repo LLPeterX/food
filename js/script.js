@@ -446,6 +446,142 @@ window.addEventListener('DOMContentLoaded', () => {
     countPlaceholder.textContent = (slideIndex < 10) ? "0" + slideIndex : slideIndex;
   }
 
+  // калькулятор калорий
+  const calcResult = document.querySelector(".calculating__result span");
+  let sex, height, weight, age, ratio;
+
+  if (localStorage.getItem('sex')) {
+    sex = localStorage.getItem('sex');
+  } else {
+    sex = 'female';
+    localStorage.setItem('sex', sex); // сразу сохраняем значение по умолчанию
+  }
+  if (localStorage.getItem('ratio')) {
+    ratio = +localStorage.getItem('ratio');
+  } else {
+    ratio = 1.375;
+    localStorage.setItem('ratio', ratio);
+  }
+  // if(localStorage.getItem('height')) {
+  //   height=+localStorage.getItem('height');
+  // }
+  // if(localStorage.getItem('weight')) {
+  //   height=+localStorage.getItem('weight');
+  // }
+  // if(localStorage.getItem('age')) {
+  //   height=+localStorage.getItem('age');
+  // }
+
+  function initLocalSettings(selector, activeClass) {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(el => {
+      el.classList.remove(activeClass);
+      if (el.getAttribute("id") === localStorage.getItem('sex')) {
+        el.classList.add(activeClass);
+      }
+      if (el.getAttribute("data-ratio") === localStorage.getItem('ratio')) {
+        el.classList.add(activeClass);
+      }
+    });
+  }
+
+  initLocalSettings('#gender div', 'calculating__choose-item_active');
+  initLocalSettings('#activity div', 'calculating__choose-item_active');
+
+
+
+  // функция расчета и отображения суточной потребности калорий на сайте
+  function calcTotal() {
+    console.log(sex, height, weight, age, ratio);
+    if (!sex || !height || !weight || !age || !ratio) {
+      calcResult.textContent = "____";
+      return;
+    }
+    let bmr;
+    if (sex === 'female') {
+      //BMR = 447.6 + (9.2 x вес, кг) + (3.1 х рост, cм) – (4.3 х возраст, лет)
+      bmr = 447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age);
+    } else {
+      //BMR = 88.36 + (13.4 x вес, кг) + (4.8 х рост, см) – (5.7 х возраст, лет)
+      bmr = 88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age);
+    }
+    bmr = Math.round(bmr * ratio);
+    calcResult.textContent = bmr;
+  }
+
+  calcTotal();
+
+  // получаем значения из <div>
+  function getStaticInformation(parentSelector, activeClass) {
+    const elements = document.querySelectorAll(`${parentSelector} div`);
+
+    elements.forEach(el => {
+      el.addEventListener('click', (e) => {
+        if (e.target.getAttribute('data-ratio')) {
+          ratio = +e.target.getAttribute('data-ratio');
+          localStorage.setItem('ratio', ratio);
+        } else {
+          sex = e.target.getAttribute("id");
+          localStorage.setItem('sex', sex);
+        }
+        // switch activity class
+        elements.forEach(el => el.classList.remove(activeClass));
+        e.target.classList.add(activeClass);
+        calcTotal();
+      }); // event listener
+    });
+  }
+
+  getStaticInformation('#gender', 'calculating__choose-item_active');
+  getStaticInformation('#activity', 'calculating__choose-item_active');
+
+  function getDynamicInformation(selector) {
+    const input = document.querySelector(selector);
+    input.addEventListener('input', () => {
+      if (input.value.match(/\D/g)) {
+        input.style.border = "2px solid red";
+      } else {
+        input.style.border = "none";
+      }
+      const value = +input.value; // may be NaN
+      switch (input.getAttribute("id")) {
+        case 'height':
+          if (!isNaN(value)) {
+            if (value > 0 && value < 250) {
+              height = value;
+            } else {
+              height = undefined;
+            }
+          }
+          break;
+        case 'weight':
+          if (!isNaN(value)) {
+            if (value > 0 && value < 200) {
+              weight = value;
+            } else {
+              weight = undefined;
+            }
+          }
+          break;
+        case 'age':
+          if (!isNaN(value)) {
+            if (value > 0 && value < 200) {
+              age = value;
+            } else {
+              age = undefined;
+            }
+          }
+          break;
+      } // case
+      calcTotal();
+    });
+
+  }
+
+  getDynamicInformation("#height");
+  getDynamicInformation("#weight");
+  getDynamicInformation("#age");
+
 }); // end 'DOMContentLoaded'
 
 
