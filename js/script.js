@@ -462,15 +462,6 @@ window.addEventListener('DOMContentLoaded', () => {
     ratio = 1.375;
     localStorage.setItem('ratio', ratio);
   }
-  // if(localStorage.getItem('height')) {
-  //   height=+localStorage.getItem('height');
-  // }
-  // if(localStorage.getItem('weight')) {
-  //   height=+localStorage.getItem('weight');
-  // }
-  // if(localStorage.getItem('age')) {
-  //   height=+localStorage.getItem('age');
-  // }
 
   function initLocalSettings(selector, activeClass) {
     const elements = document.querySelectorAll(selector);
@@ -538,38 +529,34 @@ window.addEventListener('DOMContentLoaded', () => {
   function getDynamicInformation(selector) {
     const input = document.querySelector(selector);
     input.addEventListener('input', () => {
-      if (input.value.match(/\D/g)) {
+      if (input.value.match(/\D/g)) { // общая проверка на число
         input.style.border = "2px solid red";
       } else {
         input.style.border = "none";
       }
-      const value = +input.value; // may be NaN
+      const value = +input.value;
       switch (input.getAttribute("id")) {
         case 'height':
-          if (!isNaN(value)) {
-            if (value > 0 && value < 250) {
-              height = value;
-            } else {
-              height = undefined;
-            }
+          if (value > 0 && value < 250) {
+            height = value;
+            input.style.border = "none";
+          } else {
+            height = undefined;
+            input.style.border = "2px solid red";
           }
           break;
         case 'weight':
-          if (!isNaN(value)) {
-            if (value > 0 && value < 200) {
-              weight = value;
-            } else {
-              weight = undefined;
-            }
+          if (value > 0 && value < 250) {
+            weight = value;
+          } else {
+            weight = undefined;
           }
           break;
         case 'age':
-          if (!isNaN(value)) {
-            if (value > 0 && value < 200) {
-              age = value;
-            } else {
-              age = undefined;
-            }
+          if (value > 0 && value < 190) {
+            age = value;
+          } else {
+            age = undefined;
           }
           break;
       } // case
