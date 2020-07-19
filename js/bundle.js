@@ -360,8 +360,9 @@ module.exports = deadline;
 /***/ (function(module, exports, __webpack_require__) {
 
 const thanks = __webpack_require__(/*! ./thanks */ "./js/modules/thanks.js");
+
 function form() {
-const forms = document.querySelectorAll('form');
+  const forms = document.querySelectorAll('form');
   // массив, в котором данные  ходе выполнени запроса:
   let message = {
     loading: "img/form/spinner.svg",
@@ -638,33 +639,33 @@ module.exports = tabs;
 
 const modal = __webpack_require__(/*! ./modalWindow */ "./js/modules/modalWindow.js");
 function thanks() {
-  function showThanksModal(message) {
-    const prevModalDialog = document.querySelector(".modal__dialog");
-    // скрываем предыдущий контент
-    prevModalDialog.classList.remove('show');
-    prevModalDialog.classList.add('hide');
-    modal.showModalWindow();
-    // вручную создаем новый div
-    const thanksModal = document.createElement('div');
-    thanksModal.classList.add("modal__dialog");
-    thanksModal.innerHTML = `
+function showThanksModal(message) {
+  const prevModalDialog = document.querySelector(".modal__dialog");
+  // скрываем предыдущий контент
+  prevModalDialog.classList.remove('show');
+  prevModalDialog.classList.add('hide');
+  modal.showModalWindow();
+  // вручную создаем новый div
+  const thanksModal = document.createElement('div');
+  thanksModal.classList.add("modal__dialog");
+  thanksModal.innerHTML = `
   <div class="modal__content">
     <div data-close class="modal__close">&times;</div>
     <div class="modal__title">${message}</div>
   </div>
   `;
-    const parent = document.querySelector('.modal');
-    parent.append(thanksModal);
-    setTimeout(() => {
-      thanksModal.remove();
-      prevModalDialog.classList.remove('hide');
-      prevModalDialog.classList.add('show');
-      modal.closeModalWindow();
-    }, 4000);
-  } // end thanksModal
+  const parent = document.querySelector('.modal');
+  parent.append(thanksModal);
+  setTimeout(() => {
+    thanksModal.remove();
+    prevModalDialog.classList.remove('hide');
+    prevModalDialog.classList.add('show');
+    modal.closeModalWindow();
+  }, 4000);
+} // end thanksModal
 }
 
-module.exports = thanks;
+module.exports = modal;
 
 /***/ }),
 

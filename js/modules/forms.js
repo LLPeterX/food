@@ -1,6 +1,7 @@
 const thanks = require('./thanks');
+
 function form() {
-const forms = document.querySelectorAll('form');
+  const forms = document.querySelectorAll('form');
   // массив, в котором данные  ходе выполнени запроса:
   let message = {
     loading: "img/form/spinner.svg",
