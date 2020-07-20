@@ -370,7 +370,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modalWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modalWindow */ "./js/modules/modalWindow.js");
 
 
-function form() {
+function form(timerId) {
   const forms = document.querySelectorAll('form');
   // массив, в котором данные  ходе выполнени запроса:
   let message = {
@@ -414,11 +414,11 @@ function form() {
       postData('http://localhost:3000/requests', json)
         .then(response => {
           console.log('SERVER RESP:', response);
-          showThanksModal(message.success); // Окно "спасибо", закроется через 4 сек.
+          showThanksModal(message.success,timerId); // Окно "спасибо", закроется через 4 сек.
           statusMessage.remove(); // удаляем спиннер со статусом под формой
         })
         .catch(() => {
-          showThanksModal(message.failure);
+          showThanksModal(message.failure,timerId);
         })
         .finally(() => {
           form.reset();
@@ -427,12 +427,12 @@ function form() {
     }); // event listener
   } // bindPostData()
 
-  function showThanksModal(message) {
+  function showThanksModal(message,timerId) {
     const prevModalDialog = document.querySelector(".modal__dialog");
     // скрываем предыдущий контент
     prevModalDialog.classList.remove('show');
     prevModalDialog.classList.add('hide');
-    Object(_modalWindow__WEBPACK_IMPORTED_MODULE_0__["showModalWindow"])(".modal");
+    Object(_modalWindow__WEBPACK_IMPORTED_MODULE_0__["showModalWindow"])(".modal",timerId);
     // вручную создаем новый div
     const thanksModal = document.createElement('div');
     thanksModal.classList.add("modal__dialog");
@@ -709,7 +709,7 @@ window.addEventListener('DOMContentLoaded', () => {
   Object(_modules_modalWindow__WEBPACK_IMPORTED_MODULE_1__["default"])('[data-modal]','.modal',modalWindowTimerId);
   Object(_modules_deadline__WEBPACK_IMPORTED_MODULE_2__["default"])();
   Object(_modules_cards__WEBPACK_IMPORTED_MODULE_3__["default"])();
-  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"])();
+  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"])(modalWindowTimerId);
   Object(_modules_slider__WEBPACK_IMPORTED_MODULE_5__["default"])();
   Object(_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])();
   

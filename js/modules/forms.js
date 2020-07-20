@@ -1,6 +1,6 @@
 import {showModalWindow, closeModalWindow} from './modalWindow';
 
-function form() {
+function form(timerId) {
   const forms = document.querySelectorAll('form');
   // массив, в котором данные  ходе выполнени запроса:
   let message = {
@@ -44,11 +44,11 @@ function form() {
       postData('http://localhost:3000/requests', json)
         .then(response => {
           console.log('SERVER RESP:', response);
-          showThanksModal(message.success); // Окно "спасибо", закроется через 4 сек.
+          showThanksModal(message.success,timerId); // Окно "спасибо", закроется через 4 сек.
           statusMessage.remove(); // удаляем спиннер со статусом под формой
         })
         .catch(() => {
-          showThanksModal(message.failure);
+          showThanksModal(message.failure,timerId);
         })
         .finally(() => {
           form.reset();
@@ -57,12 +57,12 @@ function form() {
     }); // event listener
   } // bindPostData()
 
-  function showThanksModal(message) {
+  function showThanksModal(message,timerId) {
     const prevModalDialog = document.querySelector(".modal__dialog");
     // скрываем предыдущий контент
     prevModalDialog.classList.remove('show');
     prevModalDialog.classList.add('hide');
-    showModalWindow(".modal");
+    showModalWindow(".modal",timerId);
     // вручную создаем новый div
     const thanksModal = document.createElement('div');
     thanksModal.classList.add("modal__dialog");
