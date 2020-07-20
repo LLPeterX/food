@@ -1,5 +1,4 @@
-function deadline() {
-const deadline = '2020-08-01 00:00'; // изменить время!
+function timer(deadline, timerSelector) {
 
   function getRemainingTime(endtime) {
     const t = Date.parse(endtime) - (new Date()); // разница в ms
@@ -59,7 +58,7 @@ const deadline = '2020-08-01 00:00'; // изменить время!
     replacePromoText('.promotion__descr', deadline);
   }
 
-  setClock(".timer", deadline);
+  setClock(timerSelector, deadline);
 }
 
-export default  deadline;
+export default  timer;

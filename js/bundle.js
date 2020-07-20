@@ -496,8 +496,7 @@ function cards() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function deadline() {
-const deadline = '2020-08-01 00:00'; // изменить время!
+function timer(deadline, timerSelector) {
 
   function getRemainingTime(endtime) {
     const t = Date.parse(endtime) - (new Date()); // разница в ms
@@ -557,10 +556,10 @@ const deadline = '2020-08-01 00:00'; // изменить время!
     replacePromoText('.promotion__descr', deadline);
   }
 
-  setClock(".timer", deadline);
+  setClock(timerSelector, deadline);
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (deadline);
+/* harmony default export */ __webpack_exports__["default"] = (timer);
 
 /***/ }),
 
@@ -828,16 +827,16 @@ const slides = document.querySelectorAll(".offer__slide"),
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-function tabs() {
-  const menuItems = document.querySelectorAll(".tabheader__item"),
-    tabContent = document.querySelectorAll(".tabcontent"),
-    menuContainer = document.querySelector(".tabheader__items");
+function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, activeClassName) {
+  const menuItems = document.querySelectorAll(tabsSelector),
+        tabContent = document.querySelectorAll(tabsContentSelector),
+        tabsParent = document.querySelector(tabsParentSelector);
 
 
   function hideTabContent() {
     tabContent.forEach(item => item.classList.add("hide"));
     menuItems.forEach(item => {
-      item.classList.remove("tabheader__item_active");
+      item.classList.remove(activeClassName);
       item.classList.remove("fade");
     }
     );
@@ -846,15 +845,15 @@ function tabs() {
   // функция показать i-й div контента
   function showTabContent(i = 0) { //default i=0
     tabContent[i].classList.replace('hide', 'show');
-    menuItems[i].classList.add("tabheader__item_active");
+    menuItems[i].classList.add(activeClassName);
     tabContent[i].classList.add("fade");
     menuItems[i].classList.add("fade");
   }
 
-  menuContainer.addEventListener('click', (event) => {
+  tabsParent.addEventListener('click', (event) => {
     event.preventDefault();
     const target = event.target;
-    if (target && target.classList.contains("tabheader__item")) {
+    if (target && target.classList.contains(tabsSelector.slice(1))) {
       menuItems.forEach((item, i) => {
         if (item === target) {
           hideTabContent();
@@ -900,9 +899,9 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', () => {
   
   const modalWindowTimerId = setInterval(()=>Object(_modules_modalWindow__WEBPACK_IMPORTED_MODULE_1__["showModalWindow"])('.modal',modalWindowTimerId),60000 );
-  Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_0__["default"])(".tabheader__item",".tabcontent",".tabheader__items","tabheader__item_active");
   Object(_modules_modalWindow__WEBPACK_IMPORTED_MODULE_1__["default"])('[data-modal]','.modal',modalWindowTimerId);
-  Object(_modules_deadline__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  Object(_modules_deadline__WEBPACK_IMPORTED_MODULE_2__["default"])('2020-08-01 00:00',".timer");
   Object(_modules_cards__WEBPACK_IMPORTED_MODULE_3__["default"])();
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"])('form',modalWindowTimerId);
   Object(_modules_slider__WEBPACK_IMPORTED_MODULE_5__["default"])();

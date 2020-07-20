@@ -11,9 +11,9 @@ import {showModalWindow} from './modules/modalWindow';
 window.addEventListener('DOMContentLoaded', () => {
   
   const modalWindowTimerId = setInterval(()=>showModalWindow('.modal',modalWindowTimerId),60000 );
-  tabs();
+  tabs(".tabheader__item",".tabcontent",".tabheader__items","tabheader__item_active");
   modal('[data-modal]','.modal',modalWindowTimerId);
-  timer();
+  timer('2020-08-01 00:00',".timer");
   cards();
   forms('form',modalWindowTimerId);
   slider();

@@ -1,14 +1,14 @@
 'use strict';
-function tabs() {
-  const menuItems = document.querySelectorAll(".tabheader__item"),
-    tabContent = document.querySelectorAll(".tabcontent"),
-    menuContainer = document.querySelector(".tabheader__items");
+function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, activeClassName) {
+  const menuItems = document.querySelectorAll(tabsSelector),
+        tabContent = document.querySelectorAll(tabsContentSelector),
+        tabsParent = document.querySelector(tabsParentSelector);
 
 
   function hideTabContent() {
     tabContent.forEach(item => item.classList.add("hide"));
     menuItems.forEach(item => {
-      item.classList.remove("tabheader__item_active");
+      item.classList.remove(activeClassName);
       item.classList.remove("fade");
     }
     );
@@ -17,15 +17,15 @@ function tabs() {
   // функция показать i-й div контента
   function showTabContent(i = 0) { //default i=0
     tabContent[i].classList.replace('hide', 'show');
-    menuItems[i].classList.add("tabheader__item_active");
+    menuItems[i].classList.add(activeClassName);
     tabContent[i].classList.add("fade");
     menuItems[i].classList.add("fade");
   }
 
-  menuContainer.addEventListener('click', (event) => {
+  tabsParent.addEventListener('click', (event) => {
     event.preventDefault();
     const target = event.target;
-    if (target && target.classList.contains("tabheader__item")) {
+    if (target && target.classList.contains(tabsSelector.slice(1))) {
       menuItems.forEach((item, i) => {
         if (item === target) {
           hideTabContent();
