@@ -1,7 +1,8 @@
 import {showModalWindow, closeModalWindow} from './modalWindow';
+import {postData} from '../services/services';
 
-function form(timerId) {
-  const forms = document.querySelectorAll('form');
+function form(formSelector, timerId) {
+  const forms = document.querySelectorAll(formSelector);
   // массив, в котором данные  ходе выполнени запроса:
   let message = {
     loading: "img/form/spinner.svg",
@@ -13,19 +14,6 @@ function form(timerId) {
     bindPostData(item);
   });
 
-  // функция отправки фопрмы обратной сваязи на сервер.
-  // @param url - URL запроса
-  // @param data - данные формы
-  const postData = async (url, data) => {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-      },
-      body: data
-    });
-    return await res.json(); // ответ - promise!
-  };
 
   // функция обработки и отправки данных формы обратной связи
   function bindPostData(form) {
