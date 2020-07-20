@@ -16,7 +16,9 @@ window.addEventListener('DOMContentLoaded', () => {
   timer('2020-08-01 00:00',".timer");
   cards();
   forms('form',modalWindowTimerId);
-  slider();
+  slider({
+    container: 'aaa'
+  });
   calc();
   
 }); 

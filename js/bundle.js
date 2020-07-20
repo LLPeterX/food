@@ -725,7 +725,8 @@ const modalTriggers = document.querySelectorAll(triggerSelector),
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function slider() {
+function slider({container, slide, nextArrow, prevArrow,
+totalCount, currentCounter, wrapper, field}) {
 
 const slides = document.querySelectorAll(".offer__slide"),
     prevButton = document.querySelector(".offer__slider-prev"),
@@ -904,7 +905,9 @@ window.addEventListener('DOMContentLoaded', () => {
   Object(_modules_deadline__WEBPACK_IMPORTED_MODULE_2__["default"])('2020-08-01 00:00',".timer");
   Object(_modules_cards__WEBPACK_IMPORTED_MODULE_3__["default"])();
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"])('form',modalWindowTimerId);
-  Object(_modules_slider__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  Object(_modules_slider__WEBPACK_IMPORTED_MODULE_5__["default"])({
+    container: 'aaa'
+  });
   Object(_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])();
   
 }); 
