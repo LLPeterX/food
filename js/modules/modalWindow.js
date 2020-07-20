@@ -1,39 +1,45 @@
-function modal() {
-const modalTriggers = document.querySelectorAll('[data-modal]'),
-    modalWindow = document.querySelector('.modal');
+export function closeModalWindow(modalSelector) {
+  const modalWindow = document.querySelector(modalSelector);
+  modalWindow.classList.remove('show');
+  modalWindow.classList.add('hide');
+  document.body.style.overflow = '';
+}
+export function showModalWindow(modalSelector, timerId) {
+  const modalWindow = document.querySelector(modalSelector);
+  modalWindow.classList.remove('hide');
+  modalWindow.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  if(timerId) {
+    clearInterval(timerId);
+  }
+}
+
+
+function modal(triggerSelector, modalSelector,timerId) {
+const modalTriggers = document.querySelectorAll(triggerSelector),
+      modalWindow = document.querySelector(modalSelector);
 
   // функции скрытия и показа модального  окна
-  function closeModalWindow() {
-    modalWindow.classList.remove('show');
-    modalWindow.classList.add('hide');
-    document.body.style.overflow = '';
-  }
-  function showModalWindow() {
-    modalWindow.classList.remove('hide');
-    modalWindow.classList.add('show');
-    document.body.style.overflow = 'hidden';
-  }
-
   // вешаем обработчики собыйтий открытия окна
   modalTriggers.forEach(trigger => {
-    trigger.addEventListener('click', showModalWindow);
+    trigger.addEventListener('click', () => showModalWindow(modalSelector,timerId));
   });
 
   modalWindow.addEventListener('click', (event) => {
     if (event.target === modalWindow || event.target.getAttribute('data-close') == '') {
-      closeModalWindow();
+      closeModalWindow(modalSelector);
     }
   });
 
   document.addEventListener('keydown', (event) => {
     if (event.code === "Escape" && modalWindow.classList.contains('show')) {
-      closeModalWindow();
+      closeModalWindow(modalSelector);
     }
   });
 
   function showModalWindowOnScroll() {
     if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-      showModalWindow();
+      showModalWindow(modalSelector,timerId);
       window.removeEventListener('scroll', showModalWindowOnScroll);
     }
   }
@@ -42,4 +48,4 @@ const modalTriggers = document.querySelectorAll('[data-modal]'),
  
 }
 
-module.exports = modal;
+export default  modal;

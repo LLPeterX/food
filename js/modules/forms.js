@@ -1,4 +1,4 @@
-const thanks = require('./thanks');
+import {showThanksModal} from './thanks';
 
 function form() {
   const forms = document.querySelectorAll('form');
@@ -44,11 +44,11 @@ function form() {
       postData('http://localhost:3000/requests', json)
         .then(response => {
           console.log('SERVER RESP:', response);
-          thanks.showThanksModal(message.success); // Окно "спасибо", закроется через 4 сек.
+          showThanksModal(message.success); // Окно "спасибо", закроется через 4 сек.
           statusMessage.remove(); // удаляем спиннер со статусом под формой
         })
         .catch(() => {
-          thanks.showThanksModal(message.failure);
+          showThanksModal(message.failure);
         })
         .finally(() => {
           form.reset();
@@ -58,4 +58,4 @@ function form() {
   } // bindPostData()
 }
 
-module.exports = form;
+export default  form;

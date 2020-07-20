@@ -30,7 +30,7 @@ function calc() {
   }
 
   function calcTotal() {
-    console.log(sex, height, weight, age, ratio);
+    //console.log(sex, height, weight, age, ratio);
     if (!sex || !height || !weight || !age || !ratio) {
       calcResult.textContent = "____";
       return;
@@ -118,4 +118,4 @@ function calc() {
 
 }
 
-module.exports = calc;
+export default calc;

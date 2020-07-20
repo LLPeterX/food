@@ -62,4 +62,4 @@ const deadline = '2020-08-01 00:00'; // изменить время!
   setClock(".timer", deadline);
 }
 
-module.exports = deadline;
+export default  deadline;

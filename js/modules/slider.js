@@ -86,5 +86,4 @@ const slides = document.querySelectorAll(".offer__slide"),
     countPlaceholder.textContent = (slideIndex < 10) ? "0" + slideIndex : slideIndex;
   }
 }
-
-module.exports = slider;
+export default  slider;
