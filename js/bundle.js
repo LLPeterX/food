@@ -367,7 +367,7 @@ const deadline = '2020-08-01 00:00'; // изменить время!
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _thanks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./thanks */ "./js/modules/thanks.js");
+/* harmony import */ var _modalWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modalWindow */ "./js/modules/modalWindow.js");
 
 
 function form() {
@@ -414,11 +414,11 @@ function form() {
       postData('http://localhost:3000/requests', json)
         .then(response => {
           console.log('SERVER RESP:', response);
-          Object(_thanks__WEBPACK_IMPORTED_MODULE_0__["showThanksModal"])(message.success); // Окно "спасибо", закроется через 4 сек.
+          showThanksModal(message.success); // Окно "спасибо", закроется через 4 сек.
           statusMessage.remove(); // удаляем спиннер со статусом под формой
         })
         .catch(() => {
-          Object(_thanks__WEBPACK_IMPORTED_MODULE_0__["showThanksModal"])(message.failure);
+          showThanksModal(message.failure);
         })
         .finally(() => {
           form.reset();
@@ -426,6 +426,31 @@ function form() {
 
     }); // event listener
   } // bindPostData()
+
+  function showThanksModal(message) {
+    const prevModalDialog = document.querySelector(".modal__dialog");
+    // скрываем предыдущий контент
+    prevModalDialog.classList.remove('show');
+    prevModalDialog.classList.add('hide');
+    Object(_modalWindow__WEBPACK_IMPORTED_MODULE_0__["showModalWindow"])(".modal");
+    // вручную создаем новый div
+    const thanksModal = document.createElement('div');
+    thanksModal.classList.add("modal__dialog");
+    thanksModal.innerHTML = `
+  <div class="modal__content">
+    <div data-close class="modal__close">&times;</div>
+    <div class="modal__title">${message}</div>
+  </div>
+  `;
+    const parent = document.querySelector('.modal');
+    parent.append(thanksModal);
+    setTimeout(() => {
+      thanksModal.remove();
+      prevModalDialog.classList.remove('hide');
+      prevModalDialog.classList.add('show');
+      Object(_modalWindow__WEBPACK_IMPORTED_MODULE_0__["closeModalWindow"])(".modal");
+    }, 4000);
+  } // end thanksModal
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (form);
@@ -648,49 +673,6 @@ function tabs() {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (tabs);
-
-/***/ }),
-
-/***/ "./js/modules/thanks.js":
-/*!******************************!*\
-  !*** ./js/modules/thanks.js ***!
-  \******************************/
-/*! exports provided: showThanksModal */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showThanksModal", function() { return showThanksModal; });
-/* harmony import */ var _modalWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modalWindow */ "./js/modules/modalWindow.js");
-
-
-function showThanksModal(message) {
-    const prevModalDialog = document.querySelector(".modal__dialog");
-    // скрываем предыдущий контент
-    prevModalDialog.classList.remove('show');
-    prevModalDialog.classList.add('hide');
-    Object(_modalWindow__WEBPACK_IMPORTED_MODULE_0__["showModalWindow"])(".modal");
-    // вручную создаем новый div
-    const thanksModal = document.createElement('div');
-    thanksModal.classList.add("modal__dialog");
-    thanksModal.innerHTML = `
-  <div class="modal__content">
-    <div data-close class="modal__close">&times;</div>
-    <div class="modal__title">${message}</div>
-  </div>
-  `;
-    const parent = document.querySelector('.modal');
-    parent.append(thanksModal);
-    setTimeout(() => {
-      thanksModal.remove();
-      prevModalDialog.classList.remove('hide');
-      prevModalDialog.classList.add('show');
-      Object(_modalWindow__WEBPACK_IMPORTED_MODULE_0__["closeModalWindow"])(".modal");
-    }, 4000);
-  } // end thanksModal
-
-
-
 
 /***/ }),
 
